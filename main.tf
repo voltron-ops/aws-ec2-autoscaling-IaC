@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_vpc" "web-vpc" {
-  cidr_block           = "20.0.0.0/16"
+  cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   tags = {
     "Name"        = "apache-web-vpc"
@@ -13,9 +13,9 @@ resource "aws_vpc" "web-vpc" {
 }
 
 resource "aws_subnet" "web-subnet-1" {
-  cidr_block        = "20.0.1.0/24"
   vpc_id            = aws_vpc.web-vpc.id
-  availability_zone = "ap-south-1a"
+  cidr_block        = var.subnets[0]
+  availability_zone = var.availability_zones[0]
   tags = {
     "Name"        = "apache-web-vpc-subnet1"
     "environment" = "dev"
@@ -25,8 +25,8 @@ resource "aws_subnet" "web-subnet-1" {
 
 resource "aws_subnet" "web-subnet-2" {
   vpc_id            = aws_vpc.web-vpc.id
-  cidr_block        = "20.0.2.0/24"
-  availability_zone = "ap-south-1b"
+  cidr_block        = var.subnets[1]
+  availability_zone = var.availability_zones[1]
   tags = {
     "Name"        = "apache-web-vpc-subnet2"
     "environment" = "dev"
